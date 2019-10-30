@@ -55,7 +55,7 @@ class Controller {
 
 	@GetMapping("/icing") @ResponseBody
 	suspend fun icing(): String? {
-        val delayMs = delayRandomMs()
+		val delayMs = delayRandomMs() // replace with delay(5000L) for stress testing
         val returnedValue = if ((0..100).random() > 30)
 			"ok"
 		else "not ok"
