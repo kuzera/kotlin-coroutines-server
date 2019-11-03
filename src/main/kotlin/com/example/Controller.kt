@@ -19,7 +19,7 @@ class Controller {
 
 	@GetMapping("/ingredients") @ResponseBody
 	suspend fun ingredients(@RequestParam(value = "value") value: String): String? {
-        val delayMs = delayRandomMs()
+        val delayMs = delayForMilliseconds()
 		val returnedValue = if (listOf("flour", "cinammon", "soda", "sugar", "egg").containsAll(value.split(",")))
 			"ok"
 		else "not ok"
@@ -28,7 +28,7 @@ class Controller {
 
 	@GetMapping("/heat") @ResponseBody
 	suspend fun heat(@RequestParam(value = "value") value: String): String? {
-        val delayMs = delayRandomMs()
+        val delayMs = delayForMilliseconds()
         val returnedValue = if (listOf("butter", "honey").containsAll(value.split(",")))
 			"ok"
 		else "not ok"
@@ -37,7 +37,7 @@ class Controller {
 
 	@GetMapping("/dough") @ResponseBody
 	suspend fun dough(@RequestParam(value = "value") value: String): String? {
-        val delayMs = delayRandomMs()
+        val delayMs = delayForMilliseconds()
         val returnedValue = if (listOf("flour", "cinammon", "soda", "sugar").containsAll(value.split(",")))
 			"ok"
 		else "not ok"
@@ -46,7 +46,7 @@ class Controller {
 
 	@GetMapping("/tray") @ResponseBody
 	suspend fun tray(): String? {
-        val delayMs = delayRandomMs()
+        val delayMs = delayForMilliseconds()
         val returnedValue = if ((0..100).random() > 30)
 			"ok"
 		else "not ok"
@@ -55,17 +55,18 @@ class Controller {
 
 	@GetMapping("/icing") @ResponseBody
 	suspend fun icing(): String? {
-		val delayMs = delayRandomMs() // replace with delay(5000L) for stress testing
+		val delayMs = delayForMilliseconds() // put 5000L as argument for stress testing
         val returnedValue = if ((0..100).random() > 30)
 			"ok"
 		else "not ok"
         return returnedValue.also { logger.info("GET /icing after $delayMs delay returns $it ") }
 	}
 
-    private suspend fun delayRandomMs(): Long {
-        val randomTimeMillis = (0..50L).random()
-        delay(randomTimeMillis)
-        return randomTimeMillis
+    private suspend fun delayForMilliseconds(fixedAmountOfTime: Long? = 0L): Long {
+        val delayTimeMillis = if (fixedAmountOfTime != null && fixedAmountOfTime > 0L)
+			fixedAmountOfTime else (0..50L).random()
+        delay(delayTimeMillis)
+        return delayTimeMillis
     }
 }
 
